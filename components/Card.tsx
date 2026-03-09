@@ -1,22 +1,18 @@
+import { Product } from "@/data/products";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Book } from "../types";
 
-interface BookCardProps {
-  book: Book;
-  onPress?: () => void;
-}
 
-const BookCard: React.FC<BookCardProps> = ({ book, onPress }) => {
+const Card: React.FC<{ product: Product; onPress?: () => void }> = ({ product, onPress }) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
-      <Image source={{ uri: book.cover }} style={styles.image} />
+      <Image source={{ uri: product.image }} style={styles.image} />
 
       <View style={styles.info}>
-        <Text style={styles.title}>{book.title}</Text>
-        <Text>Auteur : {book.author}</Text>
-        <Text>Genre : {book.genre}</Text>
-        <Text>Année : {book.year}</Text>
+        <Text style={styles.title}>{product.name}</Text>
+        <Text>Description  : {product.description}</Text>
+        <Text>Image : {product.image}</Text>
+        <Text>Prix : {product.price} €</Text>
       </View>
     </TouchableOpacity>
   );
@@ -51,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BookCard;
+export default Card;

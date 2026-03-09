@@ -1,8 +1,8 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import BookCard from "../../components/BookCard";
-import books from "../../data/books";
+import Card from "../../components/Card";
+import { Products } from "@/data/products";
 
 export default function HomeScreen() {
 
@@ -14,11 +14,11 @@ export default function HomeScreen() {
       <Text style={styles.title}>Ma Bibliothèque</Text>
 
       <FlatList
-        data={books}
+        data={Products}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <BookCard
-            book={item}
+          <Card
+            product={item}
             onPress={() =>
               router.push({
                 pathname: "/book/[id]",
