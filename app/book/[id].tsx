@@ -1,86 +1,79 @@
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Product } from "@/data/products";
+import React from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import books from "../../data/books";
+type CardProps = {
+  product: Product;
+  onPress?: () => void;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
+};
 
-export default function BookDetailScreen() {
-
-  const { id } = useLocalSearchParams();
-  const router = useRouter();
-
-  const book = books.find((b) => b.id === id);
-
-  if (!book) {
-    return <Text>Livre introuvable</Text>;
-  }
-
+const Card: React.FC<CardProps> = ({
+  product,
+  onPress,
+  isFavorite = false,
+  onToggleFavorite,
+}) => {
   return (
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.9}>
+      <TouchableOpacity style={styles.favoriteButton} onPress={onToggleFavorite}>
+        <Text style={styles.favoriteText}>{isFavorite ? "❤️" : "🤍"}</Text>
+      </TouchableOpacity>
 
-    <>
-      <Stack.Screen options={{ title: book.title }} />
+      <Image source={{ uri: product.image }} style={styles.image} />
 
-      <ScrollView style={styles.container}>
-
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.backText}>← Retour</Text>
-        </TouchableOpacity>
-
-        <Image
-          source={{ uri: book.cover }}
-          style={styles.image}
-        />
-
-        <Text style={styles.title}>{book.title}</Text>
-
-        <Text>Auteur : {book.author}</Text>
-        <Text>Genre : {book.genre}</Text>
-        <Text>Année : {book.year}</Text>
-
-        <Text style={styles.synopsis}>
-          {book.synopsis}
+      <View style={styles.info}>
+        <Text style={styles.title} numberOfLines={2}>
+          {product.name}
         </Text>
-
-      </ScrollView>
-    </>
-
+        <Text style={styles.price}>{product.price} €</Text>
+      </View>
+    </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
+  card: {
+    backgroundColor: "#fff",
+    padding: 8,
+    borderRadius: 10,
+    elevation: 2,
+    position: "relative",
+  },
 
-container:{
-padding:20
-},
+  favoriteButton: {
+    position: "absolute",
+    top: 6,
+    right: 6,
+    zIndex: 10,
+  },
 
-backButton:{
-marginBottom:10
-},
+  favoriteText: {
+    fontSize: 20,
+  },
 
-backText:{
-fontSize:16,
-color:"#007AFF"
-},
+  image: {
+    width: "100%",
+    height: 120,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
 
-image:{
-width:200,
-height:300,
-alignSelf:"center",
-marginBottom:20
-},
+  info: {
+    alignItems: "center",
+  },
 
-title:{
-fontSize:24,
-fontWeight:"bold",
-marginBottom:10
-},
+  title: {
+    fontSize: 14,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 4,
+  },
 
-synopsis:{
-marginTop:20,
-fontSize:16,
-lineHeight:24
-}
-
+  price: {
+    fontSize: 13,
+  },
 });
+
+export default Card;
